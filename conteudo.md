@@ -215,6 +215,15 @@ Os posts descartados aparecem na legenda como número, não são omitidos.
 
 ## 7. Limitações — vão para o slide
 
+> **Investigação completa em [`achados.md`](achados.md)** — sucessos e falhas
+> medidos sobre 517 posts, com os casos concretos. O resumo abaixo é a versão
+> curta.
+>
+> Os dois achados mais fortes: **"Buenos Aires" vira a palavra `air`** (nota
+> 71,9, positiva) em 177 posts; e um post sobre o **massacre da Semana Trágica
+> saiu classificado como neutro**, porque oito palavras negativas foram diluídas
+> pela média.
+
 - **O algoritmo lê palavras soltas, não frases.** Não existe noção de que
   `evicts` age sobre `home`. "Despejada da sua casa" pontua igual a "amo minha
   casa".

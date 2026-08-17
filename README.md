@@ -20,11 +20,13 @@ VIRTUAL_ENV=.venv uv pip install requests nltk pandas matplotlib langdetect
 | arquivo | o que faz |
 |---|---|
 | `conteudo.md` | documento de referência do projeto |
+| `achados.md` | **o que o classificador acerta e o que erra**, medido em 517 posts |
 | `sentimento.py` | limpeza, lematização, pontuação e classificação |
 | `teste_sentimento.py` | testes de verificação |
+| `analise_classificador.py` | investigação que gerou o `achados.md` |
 | `figura.py` | gera o histograma do slide 2 |
 | `data/anew.csv` | dicionário ANEW, 1.034 palavras |
-| `data/posts_exemplo.csv` | amostra **provisória** do Mastodon, só para desenvolver a figura |
+| `data/posts_exemplo.csv` | 517 posts do Mastodon, corpus **provisório** de investigação |
 
 ## Estado
 
