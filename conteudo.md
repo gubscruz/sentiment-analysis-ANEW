@@ -49,9 +49,10 @@ JavaScript, o que exigiria Selenium — mais lento e mais frágil.
 
 **Como o Mastodon é acessado** (`baixar_posts.py`): `GET
 /api/v1/timelines/tag/{hashtag}` na instância `mastodon.social`, paginando pelo
-`max_id` do último post de cada lote. Sem autenticação. As hashtags usadas são
-`argentina`, `buenosaires`, `argentine` e `patagonia`; posts repetidos entre
-elas são removidos pelo `id`.
+`max_id` do último post de cada lote. Sem autenticação. A hashtag usada é
+apenas `argentina` — uma entidade só, como o enunciado pede. Chegamos a testar
+`buenosaires`, `argentine` e `patagonia` para ter mais volume, mas isso trazia
+outras entidades e enviesava o resultado para o positivo (ver `achados.md`).
 
 O Bluesky ficaria melhor — a busca dele aceita texto livre e filtro de idioma
 nativo, em vez de depender de hashtag. Mas exige criar conta e gerar uma *app
@@ -223,13 +224,13 @@ Os posts descartados aparecem na legenda como número, não são omitidos.
 ## 7. Limitações — vão para o slide
 
 > **Investigação completa em [`achados.md`](achados.md)** — sucessos e falhas
-> medidos sobre 517 posts, com os casos concretos. O resumo abaixo é a versão
+> medidos sobre os 632 posts, com os casos concretos. O resumo abaixo é a versão
 > curta.
 >
-> Os dois achados mais fortes: **"Buenos Aires" vira a palavra `air`** (nota
-> 71,9, positiva) em 177 posts; e um post sobre o **massacre da Semana Trágica
-> saiu classificado como neutro**, porque oito palavras negativas foram diluídas
-> pela média.
+> O achado mais importante para ler o resultado: **metade dos posts fala de
+> futebol**, e o vocabulário do futebol é elogioso por construção (`win` = 95,
+> `champion` = 96). Boa parte do "56% positivo" é a Argentina ganhando jogo, não
+> gente elogiando o país.
 
 - **O algoritmo lê palavras soltas, não frases.** Não existe noção de que
   `evicts` age sobre `home`. "Despejada da sua casa" pontua igual a "amo minha
@@ -242,21 +243,26 @@ Os posts descartados aparecem na legenda como número, não são omitidos.
 
 ---
 
-## 8. Rascunho dos dois slides
+## 8. Os três slides
 
 ### Slide 1 — como funciona
 
-1. Baixei 905 posts em inglês sobre "Argentina" no Mastodon, com programa próprio.
+1. Baixei 632 posts em inglês sobre "Argentina" no Mastodon, com programa próprio.
 2. O ANEW dá a cada palavra uma nota de agrado de 0 a 100. A nota do post é a
    **média** das palavras dele que estão no dicionário.
 3. **O detalhe que muda tudo:** a média do próprio ANEW é 58, não 50. Comparar
-   contra 50 rotula 97% dos posts como positivos. Comparei contra 58.
+   contra 50 rotula 96% dos posts como positivos. Comparei contra 58.
 4. Post com menos de 3 palavras no dicionário foi descartado — uma palavra
    isolada decide errado (exemplo do `home`).
 
 O item 3 é o ponto mais interessante do trabalho e deve ficar em destaque.
 
-### Slide 2 — resultado
+### Slide 2 — por que essas escolhas
+
+As três decisões (uma entidade só, corte em 58, mínimo de 3 palavras), cada uma
+com o motivo. O caso da senhora despejada justifica a terceira.
+
+### Slide 3 — resultado
 
 O histograma, sozinho, com legenda auto-suficiente.
 
@@ -272,7 +278,8 @@ O histograma, sozinho, com legenda auto-suficiente.
 | `analise_classificador.py` | investigação dos acertos e falhas | pronto |
 | `figura.py` | gera o histograma do slide 2 | pronto |
 | `data/anew.csv` | dicionário, 1.034 palavras | baixado |
-| `data/posts.csv` | 905 posts em inglês do Mastodon | pronto |
+| `data/posts.csv` | 632 posts em inglês sobre Argentina | pronto |
+| `baixar_bluesky.py` | alternativa pelo Bluesky, precisa de app password | não executado |
 | `apresentacao/apresentacao.pdf` | os dois slides da entrega | pronto |
 
 ---

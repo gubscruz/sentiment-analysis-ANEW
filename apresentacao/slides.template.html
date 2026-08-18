@@ -219,16 +219,16 @@
         <div class="regua">
           <div class="rot">os mesmos posts, cortando em 50</div>
           <div class="barra">
-            <div style="width:4%; background:var(--neg)"></div>
-            <div style="width:96%; background:var(--pos)">96% positivo</div>
+            <div style="width:{{ING_NEG}}%; background:var(--neg)"></div>
+            <div style="width:{{ING_POS}}%; background:var(--pos)">{{ING_POS}}% positivo</div>
           </div>
         </div>
         <div class="regua">
           <div class="rot">cortando em 58, a média real do dicionário</div>
           <div class="barra">
-            <div style="width:3%; background:var(--neg)"></div>
-            <div style="width:41%; background:var(--neu)">41% neutro</div>
-            <div style="width:56%; background:var(--pos)">56% positivo</div>
+            <div style="width:{{PCT_NEG}}%; background:var(--neg)"></div>
+            <div style="width:{{PCT_NEU}}%; background:var(--neu)">{{PCT_NEU}}% neutro</div>
+            <div style="width:{{PCT_POS}}%; background:var(--pos)">{{PCT_POS}}% positivo</div>
           </div>
         </div>
       </div>
@@ -277,10 +277,10 @@
 
 <!-- ==================== SLIDE 3 — O RESULTADO ==================== -->
 <section class="slide">
-  <h1>Fala-se mais bem que mal da Argentina</h1>
+  <h1>{{MANCHETE}}</h1>
   <p class="sub">
-    308 posts classificados, de 632 em inglês sobre Argentina.
-    Mais da metade é positiva e quatro em cada dez ficam no meio da escala. Crítica forte é rara: 3%.
+    {{CLASSIFICADOS}} posts classificados, de {{INGLES}} em inglês sobre Argentina.
+    {{RESUMO}}
   </p>
 
   <div class="figbox">
@@ -289,7 +289,7 @@
   </div>
 
   <div class="rodape">
-    <span>2.400 posts baixados · 632 confirmados em inglês · 308 com palavras suficientes para pontuar</span>
+    <span>{{BAIXADOS}} posts baixados · {{INGLES}} confirmados em inglês · {{CLASSIFICADOS}} com palavras suficientes para pontuar</span>
     <span>3</span>
   </div>
 </section>

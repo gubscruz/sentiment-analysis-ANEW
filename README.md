@@ -24,7 +24,7 @@ VIRTUAL_ENV=.venv uv pip install requests nltk pandas matplotlib langdetect
 | arquivo | o que faz |
 |---|---|
 | `conteudo.md` | documento de referência do projeto |
-| `achados.md` | **o que o classificador acerta e o que erra**, medido em 905 posts |
+| `achados.md` | **o que o classificador acerta e o que erra**, medido em 632 posts |
 | `baixar_posts.py` | baixa os posts do Mastodon e confere o idioma |
 | `baixar_bluesky.py` | alternativa pelo Bluesky — **precisa de app password** |
 | `sentimento.py` | limpeza, lematização, pontuação e classificação |
@@ -32,7 +32,7 @@ VIRTUAL_ENV=.venv uv pip install requests nltk pandas matplotlib langdetect
 | `analise_classificador.py` | investigação que gerou o `achados.md` |
 | `figura.py` | gera o histograma do slide 2 |
 | `data/anew.csv` | dicionário ANEW, 1.034 palavras |
-| `data/posts.csv` | 905 posts em inglês, gerados por `baixar_posts.py` |
+| `data/posts.csv` | 632 posts em inglês sobre Argentina, gerados por `baixar_posts.py` |
 | `apresentacao/` | os dois slides em HTML e o PDF da entrega |
 
 ## Estado
@@ -46,9 +46,9 @@ testados e estão bloqueados. O Mastodon foi o que funcionou sem credencial —
 a tabela de testes está na seção 2 do `conteudo.md`.
 
 O `baixar_bluesky.py` está pronto para quando houver uma app password. Vale a
-troca: a busca do Bluesky aceita texto livre em vez de hashtag, o que elimina
-o viés descrito no achado 2 do `achados.md` — hoje só encontramos quem escreveu
-a hashtag, e `#patagonia` puxa o resultado para o positivo.
+troca: a busca do Bluesky aceita texto livre em vez de hashtag. Hoje só
+encontramos quem escreveu `#argentina`, o que já é um recorte — e metade desses
+posts acaba sendo sobre futebol (ver `achados.md`).
 
 ```bash
 export BSKY_USUARIO="seu-usuario.bsky.social"

@@ -23,8 +23,12 @@ from langdetect import DetectorFactory, LangDetectException, detect
 DetectorFactory.seed = 0  # torna a deteccao de idioma reproduzivel
 
 INSTANCIA = "https://mastodon.social"
-TAGS = ["argentina", "buenosaires", "argentine", "patagonia"]
-PAGINAS_POR_TAG = 18
+
+# Uma entidade so: Argentina. Hashtags como #buenosaires e #patagonia foram
+# testadas e descartadas -- sao OUTRAS entidades, e traziam posts de turismo
+# e natureza que enviesavam o resultado para o positivo.
+TAGS = ["argentina"]
+PAGINAS_POR_TAG = 60
 POR_PAGINA = 40
 DESTINO = "data/posts.csv"
 PAUSA = 0.25  # segundos entre requisicoes, para nao sobrecarregar a instancia

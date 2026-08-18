@@ -1,25 +1,38 @@
 # O que o classificador acerta e o que ele erra
 
-Investigação do comportamento do classificador sobre o corpus real: **2.880
-posts baixados** do Mastodon, **905 confirmados em inglês**, dos quais **463
-tinham palavras suficientes** para receber nota.
+Investigação do comportamento do classificador sobre **2.400 posts baixados**
+do Mastodon pela hashtag `#argentina`, dos quais **632 confirmados em inglês**
+e **308 com palavras suficientes** para receber nota.
 
-Todos os números vêm de `analise_classificador.py`, que roda sobre
-`data/posts.csv` e não altera nada do algoritmo — só observa.
+Os números vêm de `analise_classificador.py`, que roda sobre `data/posts.csv`
+e não altera nada do algoritmo — só observa.
+
+---
+
+## Um erro de método que corrigimos no meio do caminho
+
+A primeira versão buscava `#argentina`, `#buenosaires`, `#argentine` e
+`#patagonia`, para conseguir mais posts em inglês. Isso estava **errado**: o
+enunciado pede uma entidade, e Buenos Aires e Patagônia são outras entidades.
+
+O estrago era mensurável. Naquele corpus, `nature` (157) e `mountain` (128)
+estavam entre as três palavras mais frequentes, vindas de posts de turismo na
+Patagônia — que são quase sempre elogiosos. E `air` aparecia em 164 posts em
+vez dos 34 de agora.
+
+Voltamos para `#argentina` apenas. Os números deste documento são os do corpus
+corrigido.
 
 ---
 
 ## Sucessos
 
-### 1. A lematização recupera 33% mais palavras
+### 1. A lematização recupera 25% mais palavras
 
 | método | palavras encontradas |
 |---|---|
-| só casamento exato | 2.601 |
-| com lematização | **3.450** (+33%) |
-
-Palavras que só a lematização alcançou: `air`, `mountain`, `good`, `prairie`,
-`flower`, `win`, `bird`, `watch`, `moment`, `cut`, `glacier`, `water`.
+| só casamento exato | 1.563 |
+| com lematização | **1.954** (+25%) |
 
 As reduções irregulares funcionam: `won` → `win`, `best` → `good`,
 `fell` → `fall`, `fought` → `fight`.
@@ -28,161 +41,140 @@ As reduções irregulares funcionam: `won` → `win`, `best` → `good`,
 
 | régua | resultado |
 |---|---|
-| corte ingênuo em 50 | **97% positivo** |
-| faixa calibrada em 58 | 2% negativo · 37% neutro · 61% positivo |
+| corte ingênuo em 50 | **96% positivo** |
+| faixa calibrada em 58 | 2% negativo · 40% neutro · 56% positivo |
 
-Sem a calibração, o trabalho concluiria que praticamente todo mundo elogia a
+Sem a calibração, o trabalho concluiria que quase todo mundo elogia a
 Argentina — o que é composição do dicionário, não opinião das pessoas.
 
 ### 3. A verificação de idioma pega o que a API deixa passar
 
-A etiqueta de idioma do Mastodon marcou como inglês **372 posts que não eram**.
-Quase todos eram notícia em espanhol (*"Los desalojos sin juez ya son
-mayoría"*) ou italiano (ANSA, Il Fatto Quotidiano). O `langdetect` derrubou
-esses antes de qualquer palavra ser pontuada.
+A etiqueta do Mastodon marcou como inglês **282 posts que não eram**, quase
+todos notícia em espanhol ou italiano.
 
-**Mas ele erra para o outro lado também.** O post *"Memories of Buenos Aires
-for #SilentSunday #BuenosAires #Argentina #Travel"* é inglês e foi rejeitado:
-num texto curto, os nomes próprios em espanhol dominam a detecção. Trocamos
-alguns falsos positivos por alguns falsos negativos, e isso vale a pena porque
-uma palavra espanhola pontuada com nota de inglês é um erro pior.
+**Mas ela erra para o outro lado também.** O post *"Memories of Buenos Aires
+for #SilentSunday"* é inglês e foi rejeitado: num texto curto, os nomes
+próprios em espanhol dominam a detecção. Trocamos alguns falsos positivos por
+alguns falsos negativos, e vale a pena, porque uma palavra espanhola pontuada
+com nota de inglês é o erro pior.
 
 ---
 
 ## Limitações
 
-### 1. "Buenos Aires" injeta uma palavra positiva fantasma
+### 1. Metade do corpus é futebol, e futebol é positivo por vocabulário
 
-**O achado mais grave.** O lematizador reduz `aires` → `air`, que existe no
-ANEW com nota **71,9 (positiva)**.
+**O achado mais importante para interpretar o resultado.**
 
-| medida | valor |
-|---|---|
-| posts que recebem essa palavra | **164** |
-| posts classificados **só** por causa dela | **17** |
-| posição de `air` no ranking do corpus | **1º lugar**, com 164 aparições |
+| palavra | vezes | nota |
+|---|---|---|
+| `world` | 273 | 74 |
+| `news` | 113 | 60 |
+| `social` | 107 | 78 |
+| `win` | 65 | **95** |
+| `champion` | 32 | **96** |
 
-Todo post que menciona a capital argentina ganha de graça uma palavra positiva
-que ninguém escreveu. E 17 posts só entraram no resultado porque o nome da
-cidade doou a terceira palavra que faltava.
+**321 dos 632 posts (50%)** citam futebol — Copa do Mundo, Messi, campeonato.
+E o vocabulário do futebol é elogioso por construção: `win` vale 95 e
+`champion` vale 96, quase o topo da escala.
 
-**Por que isso importa:** o problema não é o ANEW nem a lematização em si, é a
-combinação dos dois com **nome próprio**. Qualquer projeto que analise uma
-entidade cujo nome contenha uma palavra comum vai sofrer disso.
+Ou seja: boa parte do “56% positivo” não é gente elogiando a Argentina como
+país. É gente narrando que a Argentina **ganhou um jogo**. O método não
+distingue as duas coisas.
 
-### 2. As hashtags escolhidas decidem a resposta
+### 2. Uma palavra decide o post em 29% dos casos
 
-As três palavras mais frequentes do corpus são `air` (164), `nature` (157) e
-`mountain` (128). As duas últimas vêm de `#patagonia`, uma das hashtags que
-escolhemos para buscar.
+Removendo de cada post apenas a **palavra mais extrema**, **92 de 308 posts
+(29%) mudam de classe**. A classificação de quase um terço do corpus está
+pendurada numa única palavra.
 
-Posts de natureza e turismo são quase sempre elogiosos. Ou seja: **parte do
-"61% positivo" foi decidida na hora em que escolhemos as hashtags**, não pelo
-que as pessoas pensam da Argentina. Trocar `#patagonia` por `#mileipresidente`
-provavelmente daria outro retrato.
+### 3. O nome da cidade vira palavra com nota
 
-### 3. Diluição: um massacre classificado como neutro
+O lematizador reduz `aires` → `air`, que existe no ANEW valendo **71,9
+(positiva)**. Isso acontece em **34 posts**, e **8 deles** só entraram no
+resultado porque essa palavra completou o mínimo de três.
 
-Este post continua saindo **NEUTRO (51,2)**:
+O problema não é o ANEW nem a lematização em si, é a combinação dos dois com
+**nome próprio**. Vale para qualquer entidade cujo nome contenha uma palavra
+comum.
 
-> *"Today in Labor History January 16, 1919: Semana Tragica (Tragic week) ended
-> on this date in Buenos Aires. The authorities **slaughtered** as many as 700
-> workers..."*
+### 4. Palavra de assunto pontua como se fosse opinião
 
-| lado | palavras encontradas |
-|---|---|
-| negativas (8) | `funeral`=16 · `slaughter`=19 · `assault`=23 · `massacre`=26 · `burn`=31 · `fire`=37 · `gun`=39 · `fight`=43 |
-| positivas (4) | `air`=72 · `people`=83 · `good`=85 · `car`=88 |
+O ANEW mede o afeto da palavra isolada. Ele não separa “o post é sobre um tema
+triste” de “o autor está triste”.
 
-Oito palavras sobre um massacre, e a média as neutraliza. Note que o `air` é o
-fantasma do item 1, e que `good` veio de `goods` (mercadorias) e `car` de
-`cars` — num texto sobre bens destruídos e carros queimados.
+O caso mais claro: um post que **homenageia** o General San Martín contém
+`death` (18) e por isso tende ao negativo. Uma notícia sobre o luto de Messi
+cai na mesma armadilha.
 
-### 4. Posts longos ficam mais perto do meio
+### 5. Posts longos ficam mais perto do meio
 
 | palavras no post | distância média do centro |
 |---|---|
-| 3 a 4 | 14,4 |
-| 5 a 8 | 15,0 |
-| 9 ou mais | **11,1** |
+| 3 a 4 | 13,4 |
+| 5 a 8 | 12,7 |
+| 9 ou mais | **9,2** |
 
-**Correção honesta:** no corpus anterior isso parecia uma escada perfeita, e eu
-descrevi como se cada palavra a mais aproximasse do centro. Não é. Posts de 5 a
-8 palavras estão até um pouco mais longe do centro que os de 3 a 4. O que se
-sustenta é o extremo: **posts com 9 ou mais palavras ficam claramente mais perto
-do meio**, e é por isso que o post do massacre, com 19 palavras, saiu neutro.
+Posts longos convergem para a média do dicionário: ficam “neutros” por
+diluição, não por serem equilibrados.
 
-### 5. Uma palavra decide o post em 23% dos casos
-
-Removendo de cada post apenas a **palavra mais extrema**, **107 de 463 posts
-(23%) mudam de classe**.
-
-| post | mudança |
-|---|---|
-| *"Argentina commemorates the **death** of General José de San Martín"* | sem `death`(18): neutro → positivo |
-| *"Lionel Messi Says He May Not Play Much Longer After Father's **Death**"* | sem `death`(18): neutro → positivo |
-| *"My ISP is doing the most bizarre website **failure**..."* | sem `failure`(19): negativo → neutro |
-
-Os dois primeiros são o mesmo problema: `death` descreve o **assunto**, não a
-opinião. Uma homenagem a San Martín e uma notícia sobre o luto de Messi não são
-posts negativos sobre a Argentina.
+*(Ressalva: no corpus anterior essa escada não era monotônica. Com 23 posts
+apenas na faixa de 9 ou mais, o número da última linha é frágil.)*
 
 ### 6. `goods` vira `good`
 
 A lematização junta palavras que só coincidem na forma: `goods` (mercadorias)
-vira `good`, o adjetivo positivo com nota 85. São palavras diferentes. O mesmo
-colapso atinge `party` (festa × partido político), `bar`, `kind`, `present`,
-`spring` e `watch`.
+vira `good`, o adjetivo positivo com nota 85. O mesmo colapso atinge `party`
+(festa × partido político), `bar`, `kind`, `present`, `spring` e `watch`.
 
 ### 7. Negação não é tratada — mas o impacto é pequeno
 
-Só **10 de 463 posts (2%)** têm negação antes de uma palavra do ANEW. Quando
-acontece, o efeito é literal: *"no time"* faz `time` contar como 60, e
-*"not lie"* faz `lie` contar como 32.
+Só **7 de 308 posts (2%)** têm negação antes de uma palavra do ANEW. Quando
+acontece, o efeito é literal: *"no time"* faz `time` contar como 60.
 
-### 8. O ANEW enxerga 5,5% do texto
+### 8. O ANEW enxerga 5,4% do texto
 
-De 62.545 tokens no corpus, apenas **3.450 estão no dicionário (5,5%)**.
+De 36.068 tokens, apenas **1.954 estão no dicionário**.
 
 | palavras do ANEW no post | posts |
 |---|---|
-| 0 | 69 |
-| 1 | 185 |
-| 2 | 188 |
-| 3 ou mais (classificados) | 463 |
+| 0 | 103 |
+| 1 | 110 |
+| 2 | 111 |
+| 3 ou mais (classificados) | 308 |
 
-**Pouco mais da metade dos posts (51%) chega a ser classificada.**
+**Menos da metade dos posts (48%) chega a ser classificada.**
 
-### 9. Média ou mediana muda 17% dos casos
+O caso que motivou a regra de três palavras é este, e está no slide 2:
 
-Trocando a média pela mediana, **79 de 463 posts (17%) mudam de classe**. A
-decisão de como combinar as notas — que o enunciado deixa em aberto — tem peso
-comparável ao da própria calibração.
+> *"An elderly lady of the indigenous Humahuaca community in Jujuy **cries** as
+> the puppet regime in Argentina **evicts** her from her **home** and land..."*
 
----
+De 63 palavras, o ANEW reconheceu **uma**: `home` = 90. Sem a regra, o post
+sairia como positivo. `cries`, `evicts` e `protests` não estão no dicionário —
+nem `cry`, `tears`, `loss` ou `die`.
 
-## O que levar para o slide
+### 9. Média ou mediana muda 20% dos casos
 
-O achado do **"Buenos Aires" → `air`** é o mais concreto e inesperado: mostra
-que o problema não estava no dicionário nem no código, mas na interação dos dois
-com nome próprio.
-
-O **massacre classificado como neutro** resume as limitações 3, 4 e 5 de uma vez
-só, num exemplo que ninguém esquece.
+Trocando a média pela mediana, **62 de 308 posts (20%) mudam de classe**. A
+decisão de como combinar as notas — que o enunciado deixa em aberto — pesa
+tanto quanto a própria calibração.
 
 ---
 
 ## Correções que estes achados sugerem
 
-Nenhuma foi aplicada — são consequências a decidir.
+Nenhuma foi aplicada — cada uma muda o resultado e precisa ser decidida.
 
-1. **Ignorar o nome da entidade e da cidade antes de pontuar.** Remove o `air`
-   fantasma. Custo: 17 posts saem do resultado.
-2. **Usar mediana em vez de média.** Reduz a alavancagem de uma palavra
-   extrema. Custo: muda 17% das classificações.
-3. **Diversificar as hashtags de busca**, ou reportar o resultado separado por
-   hashtag, para que a escolha da busca não decida a resposta.
+1. **Reportar futebol à parte.** Metade do corpus é jogo, e “ganhamos” não é
+   opinião sobre o país. Separar os dois daria dois retratos mais honestos que
+   um só.
+2. **Ignorar o nome da entidade e da cidade antes de pontuar.** Remove o `air`
+   fantasma. Custo: 8 posts saem do resultado.
+3. **Usar mediana em vez de média.** Reduz a alavancagem de uma palavra
+   extrema. Custo: muda 20% das classificações.
 4. **Separar palavra de assunto de palavra de opinião** — `death` num obituário
    não é crítica à Argentina.
-5. **Filtrar posts de veículo de notícia.** Boa parte do corpus é manchete, e o
-   método pressupõe alguém expressando sentimento próprio.
+5. **Trocar a hashtag por busca em texto livre.** Hoje só encontramos quem
+   escreveu `#argentina`, o que já é um recorte. O `baixar_bluesky.py` faz isso,
+   mas depende de uma credencial que não temos.

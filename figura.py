@@ -91,9 +91,9 @@ def histograma(notas, limites, entidade, n_baixados, caminho="figuras/sentimento
 
     ax.legend(
         handles=[
-            Patch(facecolor=NEGATIVO, label=f"negativo   {100*neg//n}%"),
-            Patch(facecolor=NEUTRO, label=f"neutro   {100*neu//n}%"),
-            Patch(facecolor=POSITIVO, label=f"positivo   {100*pos//n}%"),
+            Patch(facecolor=NEGATIVO, label=f"negativo   {round(100*neg/n)}%"),
+            Patch(facecolor=NEUTRO, label=f"neutro   {round(100*neu/n)}%"),
+            Patch(facecolor=POSITIVO, label=f"positivo   {round(100*pos/n)}%"),
         ],
         loc="upper right", frameon=False, fontsize=12, labelcolor=TINTA_2,
         handlelength=1.2, handleheight=1.2, borderpad=0, labelspacing=0.8,
