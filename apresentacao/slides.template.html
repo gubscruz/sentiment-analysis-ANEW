@@ -116,11 +116,38 @@
   .lado.errado .r { color: var(--neg); }
   .lado.certo  .r { color: var(--pos); }
 
+
+  /* ---------- capa ---------- */
+  .capa { justify-content: center; }
+  .capa .risco { width: 3.2cm; height: 5px; background: var(--pos); margin-bottom: 1.1cm; }
+  .capa h1 { font-size: 54px; line-height: 1.14; letter-spacing: -1.2px; }
+  .capa .linha-fina { font-size: 20px; color: var(--mudo); margin-top: 0.9cm; line-height: 1.5; }
+  .capa .regua-capa { width: 13cm; height: 1px; background: var(--linha); margin: 1.5cm 0 0.7cm; }
+  .capa .creditos { display: flex; gap: 4cm; font-size: 14.5px; line-height: 1.6; }
+  .capa .creditos .quem { color: var(--tinta2); }
+  .capa .creditos .onde { color: var(--mudo); }
+
   img.figura { width: 100%; height: 100%; object-fit: contain; display: block; }
   .figbox { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; margin-top: 16px; }
 </style>
 </head>
 <body>
+
+<!-- ==================== CAPA ==================== -->
+<section class="slide capa">
+  <div class="risco"></div>
+  <h1>Do que as pessoas falam<br>quando falam da Argentina</h1>
+  <p class="linha-fina">
+    Análise de sentimento de posts de rede social com o dicionário ANEW<br>
+    de normas afetivas (Bradley &amp; Lang, 1999)
+  </p>
+  <div class="regua-capa"></div>
+  <div class="creditos">
+    <div class="quem">Pedro Fardin<br>(preencher o nome do colega)</div>
+    <div class="onde">Processamento de Linguagem Natural<br>
+      {{BAIXADOS}} posts do Mastodon · agosto de 2026</div>
+  </div>
+</section>
 
 <!-- ==================== SLIDE 1 — COMO FUNCIONA ==================== -->
 <section class="slide">
