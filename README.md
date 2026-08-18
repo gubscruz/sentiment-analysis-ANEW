@@ -4,7 +4,7 @@ Análise de sentimento dos posts sobre **Argentina** no Mastodon, usando o
 dicionário ANEW (Bradley & Lang, 1999).
 
 **Entrega:** [`apresentacao/apresentacao.pdf`](apresentacao/apresentacao.pdf) —
-os dois slides.
+os três slides. Há também `apresentacao.pptx`, para abrir no PowerPoint.
 
 **Leia primeiro:** [`conteudo.md`](conteudo.md) — todas as decisões, o que foi
 testado, as inconsistências encontradas no ANEW e o rascunho dos dois slides.
@@ -33,7 +33,7 @@ VIRTUAL_ENV=.venv uv pip install requests nltk pandas matplotlib langdetect
 | `figura.py` | gera o histograma do slide 2 |
 | `data/anew.csv` | dicionário ANEW, 1.034 palavras |
 | `data/posts.csv` | 632 posts em inglês sobre Argentina, gerados por `baixar_posts.py` |
-| `apresentacao/` | os dois slides em HTML e o PDF da entrega |
+| `apresentacao/` | os três slides: template HTML, PDF e PPTX |
 
 ## Estado
 
