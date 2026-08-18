@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sentimento sobre a Argentina com ANEW</title>
+<style>
+  @page { size: 33.867cm 19.05cm; margin: 0; }
+
+  :root {
+    --papel:  #fcfcfb;
+    --tinta:  #0b0b0b;
+    --tinta2: #52514e;
+    --mudo:   #898781;
+    --linha:  #e1e0d9;
+    --neg:    #e34948;
+    --neu:    #898781;
+    --pos:    #3987e5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--tinta); background: var(--papel);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  .slide {
+    width: 33.867cm; height: 19.05cm;
+    padding: 1.5cm 2cm 1.1cm;
+    background: var(--papel);
+    page-break-after: always;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+  .slide:last-child { page-break-after: auto; }
+
+  h1 { font-size: 33px; font-weight: 700; letter-spacing: -0.4px; line-height: 1.15; }
+  .sub { font-size: 17px; color: var(--mudo); margin-top: 10px; line-height: 1.45; max-width: 28cm; }
+
+  .rodape {
+    position: absolute; bottom: 0.6cm; left: 2cm; right: 2cm;
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--mudo);
+    border-top: 1px solid var(--linha); padding-top: 7px;
+  }
+
+  .corpo { flex: 1; display: flex; gap: 38px; margin-top: 30px; min-height: 0; }
+  .col { flex: 1; min-width: 0; }
+
+  /* ---------- passos ---------- */
+  .passo { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+  .num {
+    flex: none; width: 29px; height: 29px; border-radius: 50%;
+    background: var(--tinta); color: var(--papel);
+    font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .passo h3 { font-size: 18.5px; font-weight: 600; margin-bottom: 3px; }
+  .passo p  { font-size: 16px; color: var(--tinta2); line-height: 1.5; }
+  .passo p b { color: var(--tinta); }
+
+  /* ---------- equacao ---------- */
+  .equacao {
+    background: #fff; border: 1px solid var(--linha); border-radius: 10px;
+    padding: 18px 22px; text-align: center; margin-top: 4px;
+  }
+  .equacao .f { font-size: 20px; color: var(--tinta); line-height: 1.5; }
+  .equacao .f i { color: var(--tinta2); font-style: normal; }
+  .equacao .nota { font-size: 14px; color: var(--mudo); margin-top: 9px; }
+
+  /* ---------- caixa da regua ---------- */
+  .chave {
+    background: #fff; border: 1px solid var(--linha);
+    border-left: 5px solid var(--tinta); border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+  }
+  .chave h2 { font-size: 21px; font-weight: 700; margin-bottom: 10px; line-height: 1.25; }
+  .chave p { font-size: 16px; color: var(--tinta2); line-height: 1.55; }
+  .chave p b { color: var(--tinta); }
+
+  .regua { margin-top: 15px; }
+  .regua .rot { font-size: 13px; color: var(--mudo); margin-bottom: 5px; }
+  .barra { display: flex; height: 26px; border-radius: 5px; overflow: hidden; }
+  .barra div {
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 13px; font-weight: 700;
+  }
+
+  .escala {
+    display: flex; align-items: center; gap: 0; margin-top: 16px;
+    font-size: 13.5px; color: var(--tinta2);
+  }
+  .escala span { padding: 6px 0; text-align: center; font-weight: 600; color: #fff; }
+
+  img.figura { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .figbox { flex: 1; display: flex; align-items: center; justify-content: center; min-height: 0; margin-top: 18px; }
+</style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1 ==================== -->
+<section class="slide">
+  <h1>Como decidimos se um post fala bem ou mal da Argentina</h1>
+  <p class="sub">
+    Cada palavra do dicionário ANEW já vem com uma nota de agrado dada por
+    voluntários. A nota de um post é a média das notas das suas palavras.
+  </p>
+
+  <div class="corpo">
+    <div class="col">
+      <div class="passo">
+        <div class="num">1</div>
+        <div>
+          <h3>Buscamos os posts</h3>
+          <p>Um programa nosso baixa da API do Mastodon os posts em inglês que
+             citam Argentina, Buenos Aires ou Patagônia, e confere o idioma de
+             cada um.</p>
+        </div>
+      </div>
+
+      <div class="passo">
+        <div class="num">2</div>
+        <div>
+          <h3>Casamos as palavras com o dicionário</h3>
+          <p>As 1.034 palavras do ANEW têm nota de 0 a 100.
+             <b>love</b> = 99 · <b>news</b> = 60 · <b>terrible</b> = 22.<br>
+             Reduzimos cada palavra do post à forma do dicionário, para que
+             <i>loved</i> encontre <i>love</i>.</p>
+        </div>
+      </div>
+
+      <div class="passo">
+        <div class="num">3</div>
+        <div>
+          <h3>Tiramos a média, e descartamos o que é frágil</h3>
+          <p>Post com menos de <b>3 palavras</b> conhecidas não é classificado:
+             uma palavra solta decide errado com frequência.</p>
+        </div>
+      </div>
+
+      <div class="equacao">
+        <div class="f">nota do post = média das notas das suas palavras</div>
+        <div class="nota">
+          “Argentina is <b>beautiful</b>, I <b>love</b> the <b>people</b>
+          and the <b>food</b>”<br>
+          (86 + 99 + 83 + 87) ÷ 4 = <b>89</b> → positivo
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="chave">
+        <h2>O ponto de corte não é 50 — é 58</h2>
+        <p>
+          A escala vai de 0 a 100, então o meio <i>parece</i> ser 50. Mas o ANEW não
+          é um dicionário equilibrado: <b>62% das suas palavras estão acima de
+          50</b>, e a média delas é <b>58</b>.
+        </p>
+        <p style="margin-top:11px">
+          Por isso comparamos cada post com a média do próprio dicionário. Assim,
+          “positivo” quer dizer <b>mais agradável que a palavra média do ANEW</b> —
+          e não mais agradável que um meio arbitrário da escala.
+        </p>
+
+        <div class="regua">
+          <div class="rot">os mesmos 185 posts, cortando em 50</div>
+          <div class="barra">
+            <div style="width:4%;  background:var(--neg)"></div>
+            <div style="width:96%; background:var(--pos)">96% positivo</div>
+          </div>
+        </div>
+
+        <div class="regua">
+          <div class="rot">cortando em 58, a média real do dicionário</div>
+          <div class="barra">
+            <div style="width:2%;  background:var(--neg)"></div>
+            <div style="width:49%; background:var(--neu)">49% neutro</div>
+            <div style="width:49%; background:var(--pos)">49% positivo</div>
+          </div>
+        </div>
+
+        <p style="margin-top:15px">
+          Sem essa correção, o resultado mediria o formato do dicionário em vez da
+          opinião das pessoas.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rodape">
+    <span>Dicionário ANEW (Bradley &amp; Lang, 1999) · dimensão <i>pleasure</i> · entidade: Argentina · fonte: Mastodon</span>
+    <span>1</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2 ==================== -->
+<section class="slide">
+  <h1>A Argentina divide opiniões, com leve tendência ao elogio</h1>
+  <p class="sub">
+    185 posts classificados, de 517 baixados. Quase metade fica no meio da escala e
+    quase metade é positiva. Crítica forte é rara: apenas 2%.
+  </p>
+
+  <div class="figbox">
+    <img class="figura" src="../figuras/sentimento.png"
+         alt="Distribuição das notas de agrado dos posts sobre Argentina">
+  </div>
+
+  <div class="rodape">
+    <span>517 posts baixados · 185 com palavras suficientes para pontuar · nota = média do <i>pleasure</i> das palavras do post no ANEW</span>
+    <span>2</span>
+  </div>
+</section>
+
+</body>
+</html>
