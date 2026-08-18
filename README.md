@@ -26,6 +26,7 @@ VIRTUAL_ENV=.venv uv pip install requests nltk pandas matplotlib langdetect
 | `conteudo.md` | documento de referência do projeto |
 | `achados.md` | **o que o classificador acerta e o que erra**, medido em 905 posts |
 | `baixar_posts.py` | baixa os posts do Mastodon e confere o idioma |
+| `baixar_bluesky.py` | alternativa pelo Bluesky — **precisa de app password** |
 | `sentimento.py` | limpeza, lematização, pontuação e classificação |
 | `teste_sentimento.py` | testes de verificação |
 | `analise_classificador.py` | investigação que gerou o `achados.md` |
@@ -39,7 +40,18 @@ VIRTUAL_ENV=.venv uv pip install requests nltk pandas matplotlib langdetect
 O trabalho está completo: download, pontuação, testes, investigação e os dois
 slides.
 
-Sobre a fonte: a intenção inicial era usar o Bluesky, mas a busca dele exige
+Sobre a fonte: a intenção inicial era o Bluesky, mas a busca dele exige
 autenticação (responde 403 sem login). Reddit e webscraping também foram
 testados e estão bloqueados. O Mastodon foi o que funcionou sem credencial —
 a tabela de testes está na seção 2 do `conteudo.md`.
+
+O `baixar_bluesky.py` está pronto para quando houver uma app password. Vale a
+troca: a busca do Bluesky aceita texto livre em vez de hashtag, o que elimina
+o viés descrito no achado 2 do `achados.md` — hoje só encontramos quem escreveu
+a hashtag, e `#patagonia` puxa o resultado para o positivo.
+
+```bash
+export BSKY_USUARIO="seu-usuario.bsky.social"
+export BSKY_SENHA="xxxx-xxxx-xxxx-xxxx"
+.venv/bin/python baixar_bluesky.py
+```
