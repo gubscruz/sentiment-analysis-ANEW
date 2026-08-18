@@ -4,7 +4,8 @@ Análise de sentimento dos posts sobre **Argentina** no Mastodon, usando o
 dicionário ANEW (Bradley & Lang, 1999).
 
 **Entrega:** [`apresentacao/apresentacao.pdf`](apresentacao/apresentacao.pdf) —
-os três slides. Há também `apresentacao.pptx`, para abrir no PowerPoint.
+os três slides mais a capa. Há também `apresentacao.pptx`, **com texto editável**,
+gerado por `apresentacao/gerar_pptx.py`.
 
 **Leia primeiro:** [`conteudo.md`](conteudo.md) — todas as decisões, o que foi
 testado, as inconsistências encontradas no ANEW e o rascunho dos dois slides.
