@@ -23,7 +23,7 @@ anew = carregar_anew()
 limites = calibrar(anew)
 centro = sum(limites) / 2
 
-posts = pd.read_csv("data/posts_exemplo.csv")["texto"].dropna().tolist()
+posts = pd.read_csv("data/posts.csv")["texto"].dropna().tolist()
 analisados = [(p, palavras_encontradas(p, anew)) for p in posts]
 com_nota = [(p, a, st.mean(v for _, v in a)) for p, a in analisados if len(a) >= MINIMO_PALAVRAS]
 
