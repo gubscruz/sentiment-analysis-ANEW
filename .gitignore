@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# imagens intermediarias do gerar_pptx.py
+apresentacao/paginas/

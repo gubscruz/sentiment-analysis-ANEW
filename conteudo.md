@@ -3,7 +3,7 @@
 Documento de referência: tudo que foi decidido, testado e descoberto.
 Serve de matéria-prima para os dois slides.
 
-**Entidade:** Argentina · **Rede social:** Bluesky · **Data:** 2026-08-17
+**Entidade:** Argentina · **Rede social:** Mastodon · **Data:** 2026-08-17
 
 ---
 
@@ -36,20 +36,28 @@ Todas as opções foram testadas com requisição real antes de decidir.
 
 | Fonte | Resultado | Veredito |
 |---|---|---|
-| Bluesky, busca sem login | HTTP 403 | inviável |
-| **Bluesky, busca com login** | **funciona** | **escolhido** |
+| Bluesky, busca sem login | HTTP 403 | inviável sem conta |
+| Bluesky, busca com login | funciona, mas exige app password | não usado |
 | Reddit, API `.json` | HTTP 403 | inviável |
 | Reddit, scraping `old.reddit` | HTTP 302, zero resultados | inviável |
 | Mastodon, busca por texto livre | HTTP 200 mas resposta vazia | inviável |
-| Mastodon, hashtag | funciona, mas só 16% em inglês | descartado |
+| **Mastodon, linha do tempo por hashtag** | **funciona sem credencial** | **escolhido** |
 
 **Conclusão que vale registrar:** webscraping **não** é mais fácil que API.
 O Reddit bloqueia as duas portas, e o site do Bluesky é renderizado em
 JavaScript, o que exigiria Selenium — mais lento e mais frágil.
 
-**Como o Bluesky é acessado:** conta grátis + *app password* →
-`com.atproto.server.createSession` devolve um token →
-`app.bsky.feed.searchPosts` com `q=Argentina` e `lang=en` → paginar pelo cursor.
+**Como o Mastodon é acessado** (`baixar_posts.py`): `GET
+/api/v1/timelines/tag/{hashtag}` na instância `mastodon.social`, paginando pelo
+`max_id` do último post de cada lote. Sem autenticação. A hashtag usada é
+apenas `argentina` — uma entidade só, como o enunciado pede. Chegamos a testar
+`buenosaires`, `argentine` e `patagonia` para ter mais volume, mas isso trazia
+outras entidades e enviesava o resultado para o positivo (ver `achados.md`).
+
+O Bluesky ficaria melhor — a busca dele aceita texto livre e filtro de idioma
+nativo, em vez de depender de hashtag. Mas exige criar conta e gerar uma *app
+password*, e optamos por uma fonte que qualquer pessoa consegue reproduzir sem
+credencial.
 
 **Problema encontrado:** a etiqueta de idioma da API não é confiável. No teste,
 posts em espanhol (*"Un conductor daña Pampa del Leoncito"*) e italiano
@@ -216,13 +224,13 @@ Os posts descartados aparecem na legenda como número, não são omitidos.
 ## 7. Limitações — vão para o slide
 
 > **Investigação completa em [`achados.md`](achados.md)** — sucessos e falhas
-> medidos sobre 517 posts, com os casos concretos. O resumo abaixo é a versão
+> medidos sobre os 632 posts, com os casos concretos. O resumo abaixo é a versão
 > curta.
 >
-> Os dois achados mais fortes: **"Buenos Aires" vira a palavra `air`** (nota
-> 71,9, positiva) em 177 posts; e um post sobre o **massacre da Semana Trágica
-> saiu classificado como neutro**, porque oito palavras negativas foram diluídas
-> pela média.
+> O achado mais importante para ler o resultado: **metade dos posts fala de
+> futebol**, e o vocabulário do futebol é elogioso por construção (`win` = 95,
+> `champion` = 96). Boa parte do "56% positivo" é a Argentina ganhando jogo, não
+> gente elogiando o país.
 
 - **O algoritmo lê palavras soltas, não frases.** Não existe noção de que
   `evicts` age sobre `home`. "Despejada da sua casa" pontua igual a "amo minha
@@ -235,21 +243,26 @@ Os posts descartados aparecem na legenda como número, não são omitidos.
 
 ---
 
-## 8. Rascunho dos dois slides
+## 8. Os três slides
 
 ### Slide 1 — como funciona
 
-1. Baixei N posts em inglês sobre "Argentina" no Bluesky, via API autenticada.
+1. Baixei 632 posts em inglês sobre "Argentina" no Mastodon, com programa próprio.
 2. O ANEW dá a cada palavra uma nota de agrado de 0 a 100. A nota do post é a
    **média** das palavras dele que estão no dicionário.
 3. **O detalhe que muda tudo:** a média do próprio ANEW é 58, não 50. Comparar
-   contra 50 rotula 93% dos posts como positivos. Comparei contra 58.
+   contra 50 rotula 96% dos posts como positivos. Comparei contra 58.
 4. Post com menos de 3 palavras no dicionário foi descartado — uma palavra
    isolada decide errado (exemplo do `home`).
 
 O item 3 é o ponto mais interessante do trabalho e deve ficar em destaque.
 
-### Slide 2 — resultado
+### Slide 2 — por que essas escolhas
+
+As três decisões (uma entidade só, corte em 58, mínimo de 3 palavras), cada uma
+com o motivo. O caso da senhora despejada justifica a terceira.
+
+### Slide 3 — resultado
 
 O histograma, sozinho, com legenda auto-suficiente.
 
@@ -261,24 +274,20 @@ O histograma, sozinho, com legenda auto-suficiente.
 |---|---|---|
 | `sentimento.py` | limpeza, lematização, pontuação, classificação | pronto |
 | `teste_sentimento.py` | 9 testes de verificação | **todos passam** |
-| `figura.py` | gera o histograma | rascunho, com defeito de layout |
+| `baixar_posts.py` | baixa do Mastodon e confere o idioma | pronto |
+| `analise_classificador.py` | investigação dos acertos e falhas | pronto |
+| `figura.py` | gera o histograma do slide 2 | pronto |
 | `data/anew.csv` | dicionário, 1.034 palavras | baixado |
-| `data/posts_exemplo.csv` | 94 posts do Mastodon | **provisório** |
-
-**Números provisórios.** Tudo que veio da amostra do Mastodon vai mudar quando
-os posts do Bluesky entrarem. Os números do ANEW (58,4 / 22,6 / 1.034) são
-definitivos.
+| `data/posts.csv` | 632 posts em inglês sobre Argentina | pronto |
+| `baixar_bluesky.py` | alternativa pelo Bluesky, precisa de app password | não executado |
+| `apresentacao/apresentacao.pdf` | os dois slides da entrega | pronto |
 
 ---
 
 ## 10. O que falta
 
-1. **Você:** criar conta grátis no bsky.app e gerar uma app password em
-   *Settings → Privacy and Security → App Passwords*. Não usar a senha normal.
-2. Escrever o código que baixa do Bluesky.
-3. Rodar com dados reais e medir o aproveitamento. **Risco conhecido:** posts do
-   Bluesky têm limite de 300 caracteres contra 500 do Mastodon, então podem
-   render menos palavras do ANEW por post. Se o aproveitamento for ruim, o
-   limiar de 3 precisa ser revisto com os números na mão.
-4. Corrigir o layout da figura (o subtítulo colide com o título).
-5. Montar os dois slides e exportar em PDF.
+O trabalho está completo. O que sobra é opcional:
+
+1. Aplicar as correções sugeridas no fim do `achados.md` — nenhuma foi aplicada,
+   porque cada uma muda o resultado e precisa ser decidida.
+2. Submeter `apresentacao/apresentacao.pdf` no Blackboard.
